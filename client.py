@@ -1,6 +1,6 @@
 import socket
 
-HOST = '127.0.0.1' # The server's hostname or IP address
+HOST = '192.168.64.2' # The server's hostname or IP address
 PORT = 1234 # The port used by the server
 
 # Create a socket object
