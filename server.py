@@ -1,20 +1,45 @@
 import socket
 
-HOST = '192.168.64.2' # The server's hostname or IP address
-PORT = 1234 # The port used by the server
+def main():
+    if len(sys.argv) < 2:
+        print("ERROR, no port provided")
+        sys.exit(1)
+        
+    # Create a TCP/IP socket
+    sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
-# Create a socket object
-with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
     # Bind the socket to a specific address and port
-    s.bind((HOST, PORT))
+    server_address = ('', int(sys.argv[1]))
+    sock.bind(server_address)
+
     # Listen for incoming connections
-    s.listen()
-    print('Server listening on', HOST, PORT)
-    # Accept a connection
-    conn, addr = s.accept()
-    print('Connected by', addr)
-    # Receive data from the client
-    data = conn.recv(1024)
-    print('Received', repr(data))
-    # Send a response back to the client
-    conn.sendall(b'Hello, client!')
+    sock.listen(5)
+
+    while True:
+        # Wait for a connection
+        connection, client_address = sock.accept()
+
+        try:
+            print('connection from', client_address)
+
+            # Receive the data in small chunks and retransmit it
+            while True:
+                data = connection.recv(16)
+                print('received {!r}'.format(data))
+                if data:
+                    print('sending data back to the client')
+                    connection.sendall(data)
+                else:
+                    print('no data from', client_address)
+                    break
+
+        finally:
+            # Clean up the connection
+            connection.close()
+
+    # Close the socket
+    sock.close()
+
+if __name__ == '__main__':
+    main()
+    
