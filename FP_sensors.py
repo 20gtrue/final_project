@@ -18,14 +18,20 @@ led_pin = 17
 GPIO.setup(led_pin, GPIO.OUT) # Set LED as an Output; BCM 17
 
 while True:
-  print("READING DATA:")
+  print("READING DATA....")
   
   GPIO.output(led_pin, GPIO.HIGH)   # Turn on LED Before Reading Sound
   time.sleep(0.5)
+  sound_sum = 0   # Reset sound sum to 0
   sound_channel = 1   # Sound sensor on channel 0
-  sound_val = mcp.read_adc(sound_channel)   # Read Sound Sensor on Channel 0
-  print("Value: " + str(sound_val))
+  for i in range(50):
+    sound_val = mcp.read_adc(sound_channel)   # Read Sound Sensor on Channel 0
+    print("Value: " + str(sound_val))
+    sound_sum = sound_sum + sound_val
+  sound_avg = sound_sum/50
+  print("Average Value: " + str(sound_avg))
   GPIO.output(led_pin, GPIO.LOW)
+  print("NOT READING DATA....")
   
   # PUBLISHER CODE HERE
   
