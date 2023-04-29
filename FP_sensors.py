@@ -28,6 +28,7 @@ while True:
     sound_val = mcp.read_adc(sound_channel)   # Read Sound Sensor on Channel 0
     print("Value: " + str(sound_val))
     sound_sum = sound_sum + sound_val
+    time.sleep(0.1)
   sound_avg = sound_sum/50
   print("Average Value: " + str(sound_avg))
   GPIO.output(led_pin, GPIO.LOW)
